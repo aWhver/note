@@ -1,8 +1,9 @@
-#### 手写Promise思路
-- 首先`Promise`是可以通过**new + 构造函数**返回一个Promise，即定义一个构造函数
-- 原生`Promise`接受一个执行函数，执行函数包括2个参数，resolve成功函数和reject失败函数
+#### 手写 Promise 思路
+
+- 首先`Promise`是可以通过**new + 构造函数**返回一个 Promise，即定义一个构造函数
+- 原生`Promise`接受一个执行函数，执行函数包括 2 个参数，resolve 成功函数和 reject 失败函数
 - 三个状态：`pending`、`fulFilled`、`rejected`
-- `Promise`可以同时执行多次`then`，所以需要建立2个保存`resolve`和`reject`执行函数的数组。可以用发布订阅的模式
+- `Promise`可以同时执行多次`then`，所以需要建立 2 个保存`resolve`和`reject`执行函数的数组。可以用发布订阅的模式
 
 ```javascript
   var promise = new Promise((resolve, reject) => {
@@ -16,6 +17,7 @@
   });
   // output: promise、promise
 ```
+
 - 支持链式调用，返回`新的Promise`
 - `Promise` 静态方法 `resolve`、`reject` 返回终值的`Promise`(Promsie.resolve/reject())
 - `Promise`分为 `ES Promise` 和 `Promise/A+` 规范
@@ -115,6 +117,20 @@ CustomPromise.prototype.catch = function(catchError) {
   return this.then(null, catchError);
 };
 
+// 静态方法 resolve
+CustomPromise.resolve = function(value) {
+  return new CustomPromise(resolve => {
+    resolve(value);
+  });
+};
+
+// 静态方法 reject
+CustomPromise.reject = function(value) {
+  return new CustomPromise((resolve, reject) => {
+    reject(value);
+  });
+};
+
 /**
  * @description 处理then的resolve函数返回的结果
  * 结果分为3种：
@@ -182,4 +198,5 @@ promise
 console.log(2);
 // output： 1 2 data:3 4res
 ```
-**resolve使用定时器原因：[原因(看注释部分)](https://malcolmyu.github.io/2015/06/12/Promises-A-Plus/#note-4)**
+
+**resolve 使用定时器原因：[原因(看注释部分)](https://malcolmyu.github.io/2015/06/12/Promises-A-Plus/#note-4)**
