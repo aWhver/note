@@ -4,3 +4,26 @@
 - 基础组件例如`Button`、`Icon`这类,只能从**taro**引入，从其他地方或者自己定义的的文件引入，以这些组件作为导入名时，不会报错，但是热更新，编译结果一直是之前的未使用这些组件名的代码编译的代码。
 - `children`是只读的，无法操作，也无法解构。
 - 多行溢出省略，必须加上`white-space: pre-wrap`或者 `white-space: normal !important;`。否则无法换行。`-webkit-orient-box: vertical` 上面必须加 `/* autoprefixer: off */` ，因为taro编译把它去掉了。[参考链接](https://stackoverflow.com/questions/46152850/webkit-box-orient-styling-disappears-from-styling)
+- 1px使用问题。`px`一定要使用**大写**，否则在h5下几乎看不见，在小程序下没问题
+- 一个tsx文件只能暴露出一个组件，其余都不能暴露。
+- 在class组件中，在render方法外渲染组件，方法必须要用`render`开头
+```javascript
+
+class A extends Taro.Component {
+
+  // 这里必须用render开头
+  renderBody() {
+    return <View>
+      body
+    </View>
+  }
+
+  render() {
+    return <View>
+      头部
+      {this.renderBody()}
+    </View>
+  }
+}
+
+```
