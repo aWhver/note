@@ -1,7 +1,7 @@
 <!--
  * @Author: zhaojuntong
  * @Date: 2020-02-26 21:38:18
- * @LastEditTime: 2020-03-12 12:08:19
+ * @LastEditTime: 2020-03-12 13:34:37
  * @LastEditors: zhaojuntong
  * @Description: taro开发小程序遇见的问题，以微信小程序为主，h5是事后转换对比差距的
  -->
@@ -109,7 +109,9 @@ class A extends Taro.Component {
     - 解决方案：1、删除微信，重新下载
     - 解决方案：2、资源加上版本号（可能还需要删除小程序再次进入）
 
+- 登陆授权拒绝返回信息
 
+ios返回 `getPhoneNumber:fail user deny`；android 返回 `getPhoneNumber:fail:user deny`
 
 #### 转h5
 
