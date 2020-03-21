@@ -1,7 +1,7 @@
 <!--
  * @Author: zhaojuntong
  * @Date: 2020-02-26 21:38:18
- * @LastEditTime: 2020-03-12 13:34:37
+ * @LastEditTime: 2020-03-21 11:51:50
  * @LastEditors: zhaojuntong
  * @Description: taro开发小程序遇见的问题，以微信小程序为主，h5是事后转换对比差距的
  -->
@@ -67,11 +67,14 @@ class A extends Taro.Component {
        * 因为宣传图尺寸不固定，所以需要动态计算canvas尺寸
        * canvas上的坐标点都是px，而canvas是rpx，所有都要通过calcSize方法计算换成rpx的尺寸才对得上
        */
+      const canvasWidth = 750;
+      // 得到图片宽高比
+      const imgRadio = res.height / res.width;
       // canvas宽度就是绘制图片宽度
-      setCanvasWidth(res.width);
+      setCanvasWidth(canvasWidth);
       // canvas高度是图片高度 + 400（绘制标题和小程序码的高度）
-      setCanvasHeight(res.height + 400);
-      imgHeight = res.height;
+      setCanvasHeight(res.height * canvasWidth + 400);
+      imgHeight = res.height * canvasWidth;
     });
   }, [propaganda]);
 
