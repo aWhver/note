@@ -1,5 +1,6 @@
 #### call实现
-```javascritp
+
+```javascript
     var obj = {
         name: 'inigo'
         testfn: function() {
@@ -116,4 +117,64 @@
     return result;
   }
   customApplyOfEs6(fn, obj, [{ age: 25 }, 'programmer', 170, null]);
+```
+
+#### bind实现
+
+```javascript
+  function customBindOfEs5() {
+    var fn = arguments[0];
+    var context = arguments[1];
+    var args = Array.from(arguments);
+    if (typeof context === 'object') {
+      context = context || 'window';
+    } else {
+      context = Object.create(null);
+    }
+    // 创建一个空函数用于过渡继承
+    var F = function () {};
+    F.prototype = fn.prototype;
+    var bound = function() {
+      var _args = args.concat(Array.from(arguments));
+      var combineArgs = [];
+      for(var i = 2, length = _args.length; i< length; i++) {
+        var param = _args[i];
+        switch(typeof param){
+          case 'number':
+            combineArgs.push(param);
+            break;
+          case 'string':
+            combineArgs.push('"' + param + '"');
+            break;
+          case 'object':
+            combineArgs.push(JSON.stringify(param));
+            break;
+        }
+      }
+      return eval('customCallOfEs5(fn, context,' + combineArgs + ')');
+      // return eval('fn.call(context,' + combineArgs + ')');
+    };
+    bound.prototype = new F();
+    return bound;
+  }
+  // customBindOfEs5(fn, obj, 3)(4);
+
+  function customBindOfEs6(fn, context, ...restArgs) {
+    const args = Array.from(arguments);
+    if (typeof context === 'object') {
+      context = context || 'window';
+    } else {
+      context = Object.create(null);
+    }
+    // 创建一个空函数用于过渡继承
+    const F = function () {};
+    F.prototype = fn.prototype;
+    const bound = function() {
+      return customCallOfEs6(fn, context, ...restArgs, ...arguments);
+      // return fn.call(context, ...restArgs, ...arguments)
+    }
+    bound.prototype = new F();
+    return bound;
+  }
+  customBindOfEs6(fn, obj, 23)(47);
 ```
