@@ -1,4 +1,4 @@
-#### apply实现
+#### call实现
 ```javascritp
     var obj = {
         name: 'inigo'
@@ -61,4 +61,59 @@
       return result;
     }
     customCallOfEs6(fn, obj, { age: 25 }, 'programmer', 170, null);
+```
+
+#### apply实现
+
+```javascript
+  function customApplyOfEs5() {
+    var fn = arguments[0];
+    var context = arguments[1];
+    var args = arguments[2];
+    if (typeof context === 'object') {
+      context = context || 'window';
+    } else {
+      context = Object.create(null);
+    }
+    var fnKey = Math.random().toString(36).slice(2);
+    var _args = [];
+    context[fnKey] = fn;
+    if (Object.prototype.toString.call(args) !== '[object Array]') {
+      throw new Error('第三个参数请传入数组')
+    }
+    for (var i = 0, length = args.length; i < length; i++) {
+      var param = args[i];
+      switch(typeof param){
+        case 'number':
+          _args.push(param);
+          break;
+        case 'string':
+          _args.push('"' + param + '"');
+          break;
+        case 'object':
+          _args.push(JSON.stringify(param));
+      }
+    }
+    var result = eval('context[fnKey](' + _args + ')');
+    delete context[fnKey];
+    return result;
+  }
+  // customApplyOfEs5(fn, obj, [{ age: 25 }, 'programmer', 170, null]);
+
+  function customApplyOfEs6(fn, context, arg) {
+    if (typeof context === 'object') {
+      context = context || 'window';
+    } else {
+      context = Object.create(null);
+    }
+    if (Object.prototype.toString.call(arg) !== '[object Array]') {
+      throw new Error('第三个参数请传入数组')
+    }
+    const fnKey = Math.random().toString(36).slice(2);
+    context[fnKey] = fn;
+    const result = context[fnKey](...arg);
+
+    return result;
+  }
+  customApplyOfEs6(fn, obj, [{ age: 25 }, 'programmer', 170, null]);
 ```
