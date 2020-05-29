@@ -16,7 +16,7 @@
   * [手写 Promise 思路](javascript-base/mockAPI/promise.md)
   * [call、apply、bind实现](javascript-base/mockAPI/call、apply、bind实现.md)
 * [1、详细描述 EventLoop机制](javascript-base/执行机制.md)
-* [作用域和闭包](javascript-base/作用域与闭包.md)
+* [作用域和闭包](javascript-base/作用域和闭包.md)
 * [原型与原型链](javascript-base/原型与原型链.md)
 * [变量和类型](javascript-base/变量和类型.md)
 
