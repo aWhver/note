@@ -6,8 +6,6 @@
   * [IScroll插件无法滚动](work-question/js-cha-jian.md)
   * [ios10不支持calc计算属性](work-question/css.md)
   * [ios端不支持正则后行断言](work-question/weapp.md)
-* [Interview](interview/README.md)
-  * [miniwan](interview/miniwan.md)
 * [javascript-base](javascript-base.md)
 
 ## javascript基础
