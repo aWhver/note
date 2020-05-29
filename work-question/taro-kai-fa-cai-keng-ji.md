@@ -1,46 +1,26 @@
-<!--
- * @Author: zhaojuntong
- * @Date: 2020-02-26 21:38:18
- * @LastEditTime: 2020-03-21 11:51:50
- * @LastEditors: zhaojuntong
- * @Description: taro开发小程序遇见的问题，以微信小程序为主，h5是事后转换对比差距的
- -->
-#### 基于taroV2.0.4
-##### 微信小程序
-- 基于同一基础组件嵌套不能超过2层。否则即使使用`addGlobalClass`也无法修改样式。比如定义了一个基础组件 `ButtonBase`，再基于 `ButtonBase` 封装 `Button`, 然后在页面引用 `Button`，传递`className`下去，在当前页面也无法修改`ButtonBase`的样式。在`h5`没有这个问题,因为没有作用域这个问题。
+# taro开发踩坑记
 
-- 基础组件例如`Button`、`Icon`这类,只能从**taro**引入，从其他地方或者自己定义的的文件引入，以这些组件作为导入名时，不会报错，但是热更新，编译结果一直是之前的未使用这些组件名的代码编译的代码。
+## 基于taroV2.0.4
 
-- `children`是只读的，无法操作，也无法解构。
+### 微信小程序
 
-- 多行溢出省略，必须加上`white-space: pre-wrap`或者 `white-space: normal !important;`。否则无法换行。`-webkit-orient-box: vertical` 上面必须加 `/* autoprefixer: off */` ，因为taro编译把它去掉了。[参考链接](https://stackoverflow.com/questions/46152850/webkit-box-orient-styling-disappears-from-styling)
+* 基于同一基础组件嵌套不能超过2层。否则即使使用`addGlobalClass`也无法修改样式。比如定义了一个基础组件 `ButtonBase`，再基于 `ButtonBase` 封装 `Button`, 然后在页面引用 `Button`，传递`className`下去，在当前页面也无法修改`ButtonBase`的样式。在`h5`没有这个问题,因为没有作用域这个问题。
+* 基础组件例如`Button`、`Icon`这类,只能从**taro**引入，从其他地方或者自己定义的的文件引入，以这些组件作为导入名时，不会报错，但是热更新，编译结果一直是之前的未使用这些组件名的代码编译的代码。
+* `children`是只读的，无法操作，也无法解构。
+* 多行溢出省略，必须加上`white-space: pre-wrap`或者 `white-space: normal !important;`。否则无法换行。`-webkit-orient-box: vertical` 上面必须加 `/* autoprefixer: off */` ，因为taro编译把它去掉了。[参考链接](https://stackoverflow.com/questions/46152850/webkit-box-orient-styling-disappears-from-styling)
+* 1px使用问题。`px`一定要使用**大写**，否则在h5下几乎看不见，在小程序下没问题
+* 一个tsx文件只能暴露出一个组件，其余都不能暴露。
+* 在class组件中，在render方法外渲染组件，方法必须要用`render`开头
 
-- 1px使用问题。`px`一定要使用**大写**，否则在h5下几乎看不见，在小程序下没问题
-
-- 一个tsx文件只能暴露出一个组件，其余都不能暴露。
-
-- 在class组件中，在render方法外渲染组件，方法必须要用`render`开头
-```javascript
+  \`\`\`javascript
 
 class A extends Taro.Component {
 
-  // 这里必须用render开头
-  renderBody() {
-    return <View>
-      body
-    </View>
-  }
+// 这里必须用render开头 renderBody\(\) { return  body }
 
-  render() {
-    return <View>
-      头部
-      {this.renderBody()}
-    </View>
-  }
-}
+render\(\) { return  头部 {this.renderBody\(\)} } }
 
-```
-
+```text
 - canvas绘制海报canvas单位和canvas坐标转换问题
 
 微信小程序中使用的是`rpx`单位，canvas宽高都是`rpx`单位，但是画布上的坐标点确实以`px`计算的，如果单位没有转换的话，在canvas转换成图片时会出现比例对不上的情况，比如你设置canvas宽为`200rpx`,然后画布坐标设为`200`，这其实已经超出画布了，绘制的图片只是一部分，并不是完整的。
@@ -106,20 +86,23 @@ class A extends Taro.Component {
   }
 ```
 
-- 静态资源缓存
+* 静态资源缓存
 
-微信小程序具有很严重的缓存，在开发过程中，用到一些静态资源(图片/css),如果静态资源放在服务器上，动过外链引入，我们在开发过程中用了这个资源，但是服务器上还没有，后续上线访问会读取dns的缓存，因为之前是错误的资源，访问过了，后面更新读取到的也是旧的资源，导致资源错误。
-    - 解决方案：1、删除微信，重新下载
-    - 解决方案：2、资源加上版本号（可能还需要删除小程序再次进入）
+微信小程序具有很严重的缓存，在开发过程中，用到一些静态资源\(图片/css\),如果静态资源放在服务器上，动过外链引入，我们在开发过程中用了这个资源，但是服务器上还没有，后续上线访问会读取dns的缓存，因为之前是错误的资源，访问过了，后面更新读取到的也是旧的资源，导致资源错误。
 
-- 登陆授权拒绝返回信息
+* 解决方案：1、删除微信，重新下载
+* 解决方案：2、资源加上版本号（可能还需要删除小程序再次进入）
+* 登陆授权拒绝返回信息
 
 ios返回 `getPhoneNumber:fail user deny`；android 返回 `getPhoneNumber:fail:user deny`
 
-#### 转h5
+## 转h5
 
-##### 单位表现形式不一样
-转微信小程序字体是正常的，但是转h5后rem大小空间过小，会换行(iphonese机器)，h5偏大，页面和设计稿有差距
+### 单位表现形式不一样
 
-##### 自定义bar
-- 默认没有隐藏taro自带的tabbar（添加taro-tabbar__tabbar-hide类名）。需要从二级页面返回调用hideBar隐藏tabbar（头部bar也是自定义）
+转微信小程序字体是正常的，但是转h5后rem大小空间过小，会换行\(iphonese机器\)，h5偏大，页面和设计稿有差距
+
+### 自定义bar
+
+* 默认没有隐藏taro自带的tabbar（添加taro-tabbar\_\_tabbar-hide类名）。需要从二级页面返回调用hideBar隐藏tabbar（头部bar也是自定义）
+

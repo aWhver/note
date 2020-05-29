@@ -1,4 +1,6 @@
-#### call实现
+# call、apply、bind实现
+
+## call实现
 
 ```javascript
     var obj = {
@@ -64,7 +66,7 @@
     customCallOfEs6(fn, obj, { age: 25 }, 'programmer', 170, null);
 ```
 
-#### apply实现
+## apply实现
 
 ```javascript
   function customApplyOfEs5() {
@@ -119,7 +121,7 @@
   customApplyOfEs6(fn, obj, [{ age: 25 }, 'programmer', 170, null]);
 ```
 
-#### bind实现
+## bind实现
 
 ```javascript
   function customBindOfEs5() {
@@ -178,3 +180,4 @@
   }
   customBindOfEs6(fn, obj, 23)(47);
 ```
+
