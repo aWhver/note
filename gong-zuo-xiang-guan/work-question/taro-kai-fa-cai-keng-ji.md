@@ -21,13 +21,12 @@ class A extends Taro.Component {
 render() { return this.renderBody() } }
 ```
 
-```text
 - canvas绘制海报canvas单位和canvas坐标转换问题
 
 微信小程序中使用的是`rpx`单位，canvas宽高都是`rpx`单位，但是画布上的坐标点确实以`px`计算的，如果单位没有转换的话，在canvas转换成图片时会出现比例对不上的情况，比如你设置canvas宽为`200rpx`,然后画布坐标设为`200`，这其实已经超出画布了，绘制的图片只是一部分，并不是完整的。
 
-解决方法是：需要通过获取设备像素比(pixelRadio)和设备宽度根据设计稿去动态计算画布上的坐标点。如果海报是确定的尺寸会好一些，通常cnavas和海报尺寸确定，如果海报内容不确定，通常是图片尺寸不一致，首先要通过`getImageInfo`来获取图片width、height来设置canvas大小，还要根据像素比对海报进行缩放避免失帧。
-```
+**解决方法**是：需要通过获取设备像素比(pixelRadio)和设备宽度根据设计稿去动态计算画布上的坐标点。如果海报是确定的尺寸会好一些，通常cnavas和海报尺寸确定，如果海报内容不确定，通常是图片尺寸不一致，首先要通过`getImageInfo`来获取图片width、height来设置canvas大小，还要根据像素比对海报进行缩放避免失帧。
+
 ```javascript
   // 这里是部分代码
  /**
