@@ -15,6 +15,7 @@
 * [手写原生API](javascript-ji-chu/mockapi/README.md)
   * [手写 Promise 思路](javascript-ji-chu/mockapi/promise.md)
   * [call、apply、bind实现](javascript-ji-chu/mockapi/callapplybind-shi-xian.md)
+  * [数组splice实现](javascript-ji-chu/mockapi/mockSplice.md)
 * [1、详细描述 EventLoop机制](javascript-ji-chu/zhi-hang-ji-zhi.md)
 * [作用域和闭包](javascript-ji-chu/zuo-yong-yu-he-bi-bao.md)
 * [原型与原型链](javascript-ji-chu/yuan-xing-yu-yuan-xing-lian.md)
