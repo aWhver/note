@@ -131,7 +131,7 @@ CustomPromise.reject = function (value) {
   });
 };
 
-// 静态方法 retry
+// 原型方法 retry
 CustomPromise.prototype.retry = function (fn, limit) {
   let times = 0;
   return new CustomPromise((resolve, reject) => {
