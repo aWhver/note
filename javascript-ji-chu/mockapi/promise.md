@@ -1,9 +1,9 @@
 # 手写 Promise 思路
 
-* 首先`Promise`是可以通过**new + 构造函数**返回一个 Promise，即定义一个构造函数
-* 原生`Promise`接受一个执行函数，执行函数包括 2 个参数，resolve 成功函数和 reject 失败函数
-* 三个状态：`pending`、`fulFilled`、`rejected`
-* `Promise`可以同时执行多次`then`，所以需要建立 2 个保存`resolve`和`reject`执行函数的数组。可以用发布订阅的模式
+- 首先`Promise`是可以通过**new + 构造函数**返回一个 Promise，即定义一个构造函数
+- 原生`Promise`接受一个执行函数，执行函数包括 2 个参数，resolve 成功函数和 reject 失败函数
+- 三个状态：`pending`、`fulFilled`、`rejected`
+- `Promise`可以同时执行多次`then`，所以需要建立 2 个保存`resolve`和`reject`执行函数的数组。可以用发布订阅的模式
 
 ```javascript
   var promise = new Promise((resolve, reject) => {
@@ -18,9 +18,9 @@
   // output: promise、promise
 ```
 
-* 支持链式调用，返回`新的Promise`
-* `Promise` 静态方法 `resolve`、`reject` 返回终值的`Promise`\(Promsie.resolve/reject\(\)\)
-* `Promise`分为 `ES Promise` 和 `Promise/A+` 规范
+- 支持链式调用，返回`新的Promise`
+- `Promise` 静态方法 `resolve`、`reject` 返回终值的`Promise`\(Promsie.resolve/reject\(\)\)
+- `Promise`分为 `ES Promise` 和 `Promise/A+` 规范
 
 ```javascript
 /**
@@ -53,7 +53,7 @@ function CustomPromise(exector) {
         _self.status = 'fulFilled';
         _self.data = datas;
         // 触发resolve
-        _self.onFulFilleds.forEach(fn => fn());
+        _self.onFulFilleds.forEach((fn) => fn());
       }
     });
   }
@@ -62,15 +62,15 @@ function CustomPromise(exector) {
       _self.status = 'rejected';
       _self.error = errors;
       // 触发reject
-      _self.onRejecteds.forEach(fn => fn());
+      _self.onRejecteds.forEach((fn) => fn());
     }
   }
   exector(resolve, reject);
 }
 
-CustomPromise.prototype.then = function(resolve, reject) {
-  var onFulFilled = typeof resolve === 'function' ? resolve : value => value;
-  var onRejected = typeof reject === 'function' ? reject : value => value;
+CustomPromise.prototype.then = function (resolve, reject) {
+  var onFulFilled = typeof resolve === 'function' ? resolve : (value) => value;
+  var onRejected = typeof reject === 'function' ? reject : (value) => value;
   var result, error;
   // 返回新的Promise，保证能够链式调用以及每个then返回的Promise状态相互独立
   var promise = new CustomPromise((resolve1, reject1) => {
@@ -113,21 +113,43 @@ CustomPromise.prototype.then = function(resolve, reject) {
 };
 
 // 错误捕获
-CustomPromise.prototype.catch = function(catchError) {
+CustomPromise.prototype.catch = function (catchError) {
   return this.then(null, catchError);
 };
 
 // 静态方法 resolve
-CustomPromise.resolve = function(value) {
-  return new CustomPromise(resolve => {
+CustomPromise.resolve = function (value) {
+  return new CustomPromise((resolve) => {
     resolve(value);
   });
 };
 
 // 静态方法 reject
-CustomPromise.reject = function(value) {
+CustomPromise.reject = function (value) {
   return new CustomPromise((resolve, reject) => {
     reject(value);
+  });
+};
+
+// 静态方法 retry
+CustomPromise.prototype.retry = function (fn, limit) {
+  let times = 0;
+  return new CustomPromise((resolve, reject) => {
+    function retry() {
+      times++;
+      fn()
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          if (times === limit) {
+            return reject(err);
+          }
+          retry();
+        });
+    }
+
+    retry();
   });
 };
 
@@ -158,10 +180,10 @@ function handleResult(newPromise, result, resolve, reject) {
     var then = result.then;
     if (Object.prototype.toString.call(then) === '[object Function]') {
       then(
-        res => {
+        (res) => {
           handleResult(newPromise, res, resolve, reject);
         },
-        error => {
+        (error) => {
           reject(error);
         }
       );
@@ -179,20 +201,20 @@ var promise = new CustomPromise((resolve, reject) => {
   resolve(3);
 });
 promise
-  .then(res => {
+  .then((res) => {
     console.log('data:' + res);
     return 4;
   })
   .then(
-    res => {
+    (res) => {
       // throw new Error("43432");
       console.log(res, 'res');
     },
-    err => {
+    (err) => {
       console.log(err);
     }
   )
-  .catch(error => {
+  .catch((error) => {
     console.log(error, 'err');
   });
 console.log(2);
@@ -200,4 +222,3 @@ console.log(2);
 ```
 
 **resolve 使用定时器原因：**[**原因\(看注释部分\)**](https://malcolmyu.github.io/2015/06/12/Promises-A-Plus/#note-4)
-
