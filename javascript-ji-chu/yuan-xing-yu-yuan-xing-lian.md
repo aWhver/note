@@ -53,32 +53,30 @@ Parent.prototype.getName = function () {
 };
 ```
 
-<summary>1、原型链继承
-  <details>
-    **原理**：通过将父类的实例赋值给子类的`prototype`
+#### 1、原型链继承
 
-    ```javascript
-    function Children() {}
-    Children.prototype = new Parent();
-    Parent.prototype.age = 24;
-    var instanceC = new Children();
-    console.log(instanceC.name); // Inigo console.log(instanceC.age); // 24
-    ```
+  **原理**：通过将父类的实例赋值给子类的`prototype`
 
-    **优点**：
+  ```javascript
+  function Children() {}
+  Children.prototype = new Parent();
+  Parent.prototype.age = 24;
+  var instanceC = new Children();
+  console.log(instanceC.name); // Inigo console.log(instanceC.age); // 24
+  ```
 
-    - 实例是父类的实例，也是子类的实例
-    - 实现简单
-    - 父类新增原型方法/原型属性，子类都能访问到
-      **缺点**：
-    - 无法实现多继承
-    - 来自原型对象的所有属性被所有实例共享，一个属性被修改，所有实例的属性都修改
-    - 创建子类实例时，无法向父类构造函数传参
-    - 如果要为子类添加属性和方法，需要放置在子类`prototype`的赋值之后，在之前的话会被父类实例覆盖
-  </details>
-</summary>
+  **优点**：
 
-2、构造函数继承(call)
+  - 实例是父类的实例，也是子类的实例
+  - 实现简单
+  - 父类新增原型方法/原型属性，子类都能访问到
+    **缺点**：
+  - 无法实现多继承
+  - 来自原型对象的所有属性被所有实例共享，一个属性被修改，所有实例的属性都修改
+  - 创建子类实例时，无法向父类构造函数传参
+  - 如果要为子类添加属性和方法，需要放置在子类`prototype`的赋值之后，在之前的话会被父类实例覆盖
+
+#### 2、构造函数继承(call)
 **原理**：在子类构造函数执行父类构造函数用 call 改变 this 指针
 
 ```javascript
@@ -102,7 +100,7 @@ console.log(instanceC instanceof Children); // true
 - 实例是子类的实例，与父类无关
 - 无法实现函数复用，每个子类都有父类实例函数的副本，影响性能
 
-3、拷贝继承
+#### 3、拷贝继承
 **原理**：通过遍历将父类的属性/方法赋值给子类
 
 ```javascript
@@ -124,7 +122,7 @@ console.log(instanceC.getName()); // zhaojuntong
   **缺点**：
 - 因为要拷贝父类的属性/方法，效率较低，内存占用高 - 不可枚举属性无法获取
 
-4、实例继承
+#### 4、实例继承
 **原理**：
 
 ```javascript
@@ -144,7 +142,7 @@ console.log(instanceC.age); // twenty four console.log(instanceC.getName()); // 
 - 实例是父类的实例，与子类无关
 - 不支持多继承
 
-5、组合继承
+#### 5、组合继承
 **原理**：原型继承和构造函数继承的结合体，构造函数弥补了原型继承的一些缺点
 
 ```javascript
@@ -172,7 +170,7 @@ console.log(instanceofP.fn); // []; 子类修改没有触发到父类，不存�
   **缺点**：
 - 父类构造函数调用 2 次
 
-6、组合寄生式继承
+#### 6、组合寄生式继承
 **原理**：通过创建一个新的构造函数，将父类的 prototype 赋值给新构造函数，新构造函数实例化赋值给子类。这样，在调用两次父类的构造的时候，就不会初始化两次实例方法/属性，避免的组合继承的缺点
 
 ```javascript
