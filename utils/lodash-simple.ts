@@ -4,13 +4,13 @@ import { DefaultRecord } from '../typings';
  * @date 2021-03-25
  * @return any
 */
-export const get = function (obj: DefaultRecord, keyPath: string) {
+export const get = function (obj: DefaultRecord | any[], keyPath: string) {
   const reg = /\[(\w+|\d+)\]/g;
   const newKeyPath = keyPath.replace(reg, '.$1');
   const paths = newKeyPath.split('.');
   let result: any = obj;
   while(paths.length){
-    var p = paths.shift();
+    const p = paths.shift();
     result = Object(result)[p];
     if (result === undefined) {
       return undefined;
@@ -18,5 +18,3 @@ export const get = function (obj: DefaultRecord, keyPath: string) {
   }
   return result
 };
-
-export default 4;

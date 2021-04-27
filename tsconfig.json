@@ -12,6 +12,10 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "importHelpers": true,
+    "paths": {
+      "algorithm": ["./algorithm"],
+      "utils": ["./utils"]
+    },
     "rootDirs": [
       "algorithm/LRU",
       "utils"
