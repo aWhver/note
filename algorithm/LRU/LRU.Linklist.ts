@@ -56,7 +56,9 @@ class LRUCache<T> {
     } else if (this.size >= this.limit) {
       delete this.LinkedListNodeMap[this.tail.key];
       this.tail = this.tail.prevNode;
-      this.tail.nextNode = null;
+      if (this.tail) {
+        this.tail.nextNode = null;
+      }
       this.size--;
       // this.tail.prevNode =
     }
@@ -100,7 +102,7 @@ class LRUCache<T> {
     this.LinkedListNodeMap[node.key] = node;
   }
   getSize() {
-    return this.size
+    return this.size;
   }
 }
 
