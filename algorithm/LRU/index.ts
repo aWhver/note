@@ -22,8 +22,16 @@ console.timeEnd('lrcArrayupdate');
 
 console.log(`size: ${lrcArray.records.length}`)
 console.log('\r---------------------\r');
-const lrc = new LRULinklist<number>(10);
-for (let i = 0; i < 10; i++) {
+
+const lrc = new LRULinklist<number>(5000);
+console.time('lrcLinklistset');
+for (let i = 0; i < 10000; i++) {
   lrc.put(String(i), i);
 }
-console.log(lrc.LinkedListNodeMap);
+console.timeEnd('lrcLinklistset');
+console.time('lrcLinklistupdate');
+for (let i = 0; i < 10000; i++) {
+  lrc.put(String(i), i);
+}
+console.timeEnd('lrcLinklistupdate');
+console.log(lrc.size);
